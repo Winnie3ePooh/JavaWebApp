@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/app.js"></script>
+        <title>Contact List</title>
+    </head>
+    <body onload="getContacts();">
+	<div class="container chat-wrapper">
+            <form id="do-chat">
+                <p>ЧАААААААААААААТИИИИИИИИИК</p>
+                    <div style="height:200px; overflow:auto;">
+                        <table id="response" class="table table-bordered"></table>
+                    </div>
+                    <fieldset>
+                        <legend>Enter your message..</legend>
+			<div class="controls">
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">Эл.почта:</label>
+                                <div class="controls">
+                                    <input type="text" name="mesText" placeholder="message" required>
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-large btn-block btn-primary"
+						onclick="addBtn();" value="Send message" />
+                        </div>
+                    </fieldset>
+		</form>
+	</div>
+    </body>
+</html>
+
