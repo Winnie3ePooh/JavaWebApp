@@ -1,5 +1,6 @@
 package ru.ifmo.javawebapp;
 
+import java.util.Date;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
@@ -11,28 +12,30 @@ import org.json.simple.JSONObject;
 public class Contact implements JSONAware {
 
     private Long id;
-    private String fio;
-    private String phone;
-    private String email;
+    private String nick;
+    private String mess;
 
     /**
      * Конструктор контакта.
      * @param id идентификатор контакта.
      * @param fio ФИО.
-     * @param phone телефон.
-     * @param email электронная почта.
      */
-    public Contact(Long id, String fio) {
+    public Contact(Long id, String nick, String mess) {
         this.id = id;
-        this.fio = fio;
+        this.nick = nick;
+        this.mess = mess;
     }
     
     public Long getId() {
         return id;
     }
 
-    public String getFIO() {
-        return fio;
+    public String getNICK() {
+        return nick;
+    }
+    
+    public String getMESS(){
+        return mess;
     }
 
     /**
@@ -50,11 +53,17 @@ public class Contact implements JSONAware {
         sb.append(id);
 
         sb.append(",");
-
-        sb.append("\"").append("fio").append("\"");
+        
+        sb.append("\"").append("nick").append("\"");
         sb.append(":");
-        sb.append("\"").append(JSONObject.escape(fio)).append("\"");
+        sb.append("\"").append(JSONObject.escape(nick)).append("\"");
 
+        sb.append(",");
+        
+        sb.append("\"").append("mess").append("\"");
+        sb.append(":");
+        sb.append("\"").append(JSONObject.escape(mess)).append("\"");
+        
         sb.append("}");
 
         return sb.toString();

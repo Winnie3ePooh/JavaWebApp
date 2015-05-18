@@ -11,14 +11,14 @@ import org.json.simple.JSONObject;
  * @author Anton Skshidlevsky
  * @see http://www.h2database.com/html/quickstart.html 
  */
-public class ContactList {
+public class UsersFunc {
     
     private static final String dbUrl = "jdbc:h2:~/test1";
 
     /**
      * Конструктор класса, регистрирует драйвер БД.
      */
-    public ContactList() {
+    public UsersFunc() {
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException ex) {
@@ -43,7 +43,6 @@ public class ContactList {
     /**
      * Создать БД.
      * @return в случае успеха возвражает пустой JSON объект, иначе null.
-     * st.execute("DROP TABLE PUBLIC.PEOPLE");
      */
     public JSONObject createDB() {
         Connection conn = null;
@@ -51,8 +50,8 @@ public class ContactList {
         try {
             conn = DriverManager.getConnection(dbUrl);
             Statement st = conn.createStatement();
-            st.execute("create table people(id INT PRIMARY KEY AUTO_INCREMENT, nick varchar(255),"
-                    + "mess varchar(255))");
+            st.execute("create table users(id INT PRIMARY KEY AUTO_INCREMENT, login varchar(255),"
+                    + "pass varchar(255))");
             
             result = new JSONObject();
         } catch (SQLException ex) {
@@ -63,49 +62,40 @@ public class ContactList {
         return result;
     }
 
-    /**
-     * Получить список контактов.
-     * @return массив объектов JSON.
-     */
-    public JSONArray list() {
+    public boolean checking(String loginCheck, String passCheck) {
+        boolean check = false;
         Connection conn = null;
         JSONArray list = null;
         try {
             conn = DriverManager.getConnection(dbUrl);
             
             Statement st = conn.createStatement();
-            ResultSet result = st.executeQuery("SELECT * FROM (SELECT * FROM PEOPLE ORDER BY id DESC LIMIT 10) ORDER BY id");
-            
-            list = new JSONArray();
+            ResultSet result = st.executeQuery("SELECT * FROM USERS");
             while (result.next()) {
-                Contact c = new Contact(result.getLong("ID"),
-                        result.getString("NICK"),result.getString("MESS"));
-                list.add(c);
+                if(result.getString("LOGIN").equals(loginCheck) && result.getString("PASS").equals(passCheck)){
+                    check = true;
+                    break;
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(ContactList.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             closeQuietly(conn);
         }
-        return list;
+        return check;
     }
 
-    /**
-     * Добавить контакт.
-     * @param c контакт, в качестве id любое значение или null.
-     * @return в случае успеха возвражает id контакта в формате JSON, иначе null.
-     */
-    public JSONObject add(Contact c) {
+    public JSONObject add(Users c) {
         Connection conn = null;
         JSONObject result = null;
         try {
             conn = DriverManager.getConnection(dbUrl);
             
-            String q = "INSERT INTO PEOPLE(nick,mess) VALUES(?,?)";
+            String q = "INSERT INTO USERS(login,pass) VALUES(?,?)";
             PreparedStatement st = conn.prepareStatement(q);
 
-            st.setString(1, c.getNICK());;
-            st.setString(2, c.getMESS());
+            st.setString(1, c.getLOGIN());
+            st.setString(2, c.getPASS());
             st.execute();
             
             long id = -1;
@@ -122,32 +112,6 @@ public class ContactList {
             closeQuietly(conn);
         }
         return result;
-    }
-    
-    /**
-     * Удалить контакт.
-     * @param id идентификатор контакта.
-     * @return в случае успеха возвражает пустой JSON объект, иначе null.
-     */
-    public JSONObject remove(String id) {
-        Connection conn = null;
-        JSONObject result = null;
-        try {
-            conn = DriverManager.getConnection(dbUrl);
-
-            String q = "DELETE FROM PEOPLE WHERE ID = ?";
-            PreparedStatement st = conn.prepareStatement(q);
-
-            st.setString(1, id);
-            st.execute();
-            
-            result = new JSONObject();
-        } catch (SQLException ex) {
-            Logger.getLogger(ContactList.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeQuietly(conn);
-        }
-        return result;
-    }
+    } 
     
 }

@@ -46,15 +46,24 @@ public class ContactsServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             ContactList cl = new ContactList();
-
+            UsersFunc uf = new UsersFunc();
+            
             if (request.getParameter("action").equals("list")) {
                 out.println(cl.list());
             }
 
             if (request.getParameter("action").equals("add")) {
                 Contact c = new Contact(null,
+                        request.getParameter("nickname"),
                         request.getParameter("mesText"));
                 out.println(cl.add(c));
+            }
+            
+            if (request.getParameter("action").equals("addUser")) {
+                Users c = new Users(null,
+                        request.getParameter("login"),
+                        request.getParameter("pass"));
+                out.println(uf.add(c));
             }
 
             if (request.getParameter("action").equals("remove")) {
@@ -63,6 +72,7 @@ public class ContactsServlet extends HttpServlet {
             
             if (request.getParameter("action").equals("createdb")) {
                 out.println(cl.createDB());
+                out.println(uf.createDB());
             }            
         } finally {
             out.close();

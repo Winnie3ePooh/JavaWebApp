@@ -14,7 +14,7 @@
 </head>
 <body onload="getContacts();">
     <script>
-        setInterval(getContacts,1000);
+        setInterval(getContacts,10000);
     </script>
     <%
     String userName = null;
@@ -24,29 +24,30 @@
             if(cookie.getName().equals("user")) userName = cookie.getValue();
     }
     }
-    if(userName == null) response.sendRedirect("login.html");
+    if(userName == null) response.sendRedirect("index.html");
     %>
-    <h3>Hi <%=userName %>, Login successful.</h3>
+    <h3>Hi <%=userName %>, Welcome to chat!</h3>
     
     <div class="container chat-wrapper">
-            <form id="do-chat">
-                    <div style="height:200px; overflow:auto;">
+                    <div id="chatik" style="height:200px; overflow:auto;">
                         <table id="response" class="table table-bordered"></table>
                     </div>
+        <form id="do-chat">
                     <fieldset>
                         <legend>Enter your message..</legend>
 			<div class="controls">
                             <div class="control-group">
                                 <div class="controls">
-                                    <input type="text" class="input-block-level" placeholder="Your message..." name="mesText" style="height:60px"/>
+                                    <input id="mesChat" type="text" class="input-block-level" placeholder="Your message..." name="mesText" style="height:60px"/>
                                 </div>
-                            </div>
-                            <input type="submit" class="btn btn-large btn-block btn-primary"
-						onclick="addBtn();" value="Send message" />
+                            </div> 
+                        </div>
+                        <div>
+                            <button onclick="addBtn();" class="btn btn-primary">Отправить</button>
                         </div>
                     </fieldset>
-		</form>
-	</div>
+	</form>
+</div>
     
     <form action="LogoutServlet" method="post">
         <input class="btn-primary" type="submit" value="Logout" >
